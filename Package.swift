@@ -10,9 +10,28 @@ let package = Package(
         .executable(name: "PollutionTracker", targets: ["PollutionTracker"])
     ],
     targets: [
+        .target(
+            name: "PollutionCore",
+            dependencies: []
+        ),
         .executableTarget(
             name: "PollutionTracker",
+            dependencies: ["PollutionCore"],
             path: "Sources/PollutionTracker"
+        ),
+        .executableTarget(
+            name: "PollutionWidget",
+            dependencies: ["PollutionCore"],
+            path: "Sources/PollutionWidget"
+        ),
+        .testTarget(
+            name: "PollutionCoreTests",
+            dependencies: ["PollutionCore"]
+        ),
+        .executableTarget(
+            name: "PollutionVerifier",
+            dependencies: ["PollutionCore"],
+            path: "Sources/PollutionVerifier"
         )
     ]
 )

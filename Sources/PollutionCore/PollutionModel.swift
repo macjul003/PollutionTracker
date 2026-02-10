@@ -1,22 +1,28 @@
 import Foundation
 
-struct PollutionResponse: Decodable {
-    let current: CurrentData
+public struct PollutionResponse: Decodable {
+    public let current: CurrentData
     
-    struct CurrentData: Decodable {
-        let us_aqi: Int?
-        let pm10: Double?
-        let pm2_5: Double?
+    public struct CurrentData: Decodable {
+        public let us_aqi: Int?
+        public let pm10: Double?
+        public let pm2_5: Double?
     }
 }
 
-struct PollutionData {
-    let aqi: Int
-    let pm10: Double
-    let pm2_5: Double
+public struct PollutionData {
+    public let aqi: Int
+    public let pm10: Double
+    public let pm2_5: Double
+    
+    public init(aqi: Int, pm10: Double, pm2_5: Double) {
+        self.aqi = aqi
+        self.pm10 = pm10
+        self.pm2_5 = pm2_5
+    }
     
     // Helper to get color based on US AQI
-    var color: String {
+    public var color: String {
         switch aqi {
         case 0...50: return "Green"
         case 51...100: return "Yellow"
@@ -27,7 +33,7 @@ struct PollutionData {
         }
     }
     
-    var description: String {
+    public var description: String {
         switch aqi {
         case 0...50: return "Good"
         case 51...100: return "Moderate"

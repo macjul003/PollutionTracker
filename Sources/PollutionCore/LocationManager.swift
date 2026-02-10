@@ -1,16 +1,22 @@
 import Foundation
 import CoreLocation
 
-class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+public class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
-    @Published var location: CLLocation?
-    @Published var authorizationStatus: CLAuthorizationStatus?
-    @Published var cityName: String?
+    @Published public var location: CLLocation?
+    @Published public var authorizationStatus: CLAuthorizationStatus?
+    @Published public var cityName: String?
+    @Published public var statusMessage: String = "Initializing..."
 
-    override init() {
+    public override init() {
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.distanceFilter = 100 // Avoid too many updates
+        // Request permission immediately on launch
+        manager.requestWhenInUseAuthorization()
+        manager.startUpdatingLocation() 
+        statusMessage = "Started updates..."
     }
     
     private func reverseGeocode(location: CLLocation) {
@@ -24,21 +30,23 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
 
-    func requestPermission() {
+    public func requestPermission() {
         manager.requestWhenInUseAuthorization()
     }
     
-    func start() {
+    public func start() {
         manager.startUpdatingLocation()
     }
 
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let loc = locations.last else { return }
         self.location = loc
+        self.statusMessage = "Location received"
+        // specific optimization removed to ensure reliability
         reverseGeocode(location: loc)
     }
 
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         self.authorizationStatus = manager.authorizationStatus
         
         let isAuthorized: Bool
@@ -49,11 +57,15 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         #endif
         
         if isAuthorized {
+            statusMessage = "Authorized. Updating..."
             manager.startUpdatingLocation()
+        } else {
+            statusMessage = "Auth Status: \(manager.authorizationStatus.rawValue)"
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location error: \(error.localizedDescription)")
+        statusMessage = "Error: \(error.localizedDescription)"
     }
 }
