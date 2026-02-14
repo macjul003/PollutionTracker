@@ -17,12 +17,14 @@ let package = Package(
         .executableTarget(
             name: "PollutionTracker",
             dependencies: ["PollutionCore"],
-            path: "Sources/PollutionTracker"
+            path: "Sources/PollutionTracker",
+            exclude: ["Info.plist"]
         ),
         .executableTarget(
             name: "PollutionWidget",
             dependencies: ["PollutionCore"],
-            path: "Sources/PollutionWidget"
+            path: "Sources/PollutionWidget",
+            exclude: ["Info.plist"]
         ),
         .testTarget(
             name: "PollutionCoreTests",

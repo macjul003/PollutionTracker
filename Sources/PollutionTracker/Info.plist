@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleIdentifier</key>
-    <string>com.example.PollutionTracker</string>
+    <string>com.macjul003.PollutionTracker</string>
     <key>CFBundleName</key>
     <string>PollutionTracker</string>
     <key>CFBundlePackageType</key>

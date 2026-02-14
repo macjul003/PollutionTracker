@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 public struct PollutionResponse: Decodable {
     public let current: CurrentData
@@ -41,6 +42,18 @@ public struct PollutionData {
         case 151...200: return "Unhealthy"
         case 201...300: return "Very Unhealthy"
         default: return "Hazardous"
+        }
+    }
+
+    public var swiftUIColor: Color {
+        switch color {
+        case "Green": return Color(red: 0.2, green: 0.7, blue: 0.3)
+        case "Yellow": return Color(red: 0.95, green: 0.75, blue: 0.1)
+        case "Orange": return Color(red: 1.0, green: 0.5, blue: 0.0)
+        case "Red": return Color(red: 0.9, green: 0.2, blue: 0.2)
+        case "Purple": return Color(red: 0.6, green: 0.2, blue: 0.6)
+        case "Maroon": return Color(red: 0.4, green: 0.1, blue: 0.1)
+        default: return Color.gray
         }
     }
 }
