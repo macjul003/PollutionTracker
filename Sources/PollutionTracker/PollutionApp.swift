@@ -14,6 +14,8 @@ struct PollutionApp: App {
 
     private let timer = Timer.publish(every: 1800, on: .main, in: .common).autoconnect()
 
+    private let bundleMonitor = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+
     init() {
         moveToApplicationsIfNeeded()
     }
@@ -69,6 +71,9 @@ struct PollutionApp: App {
                 .onReceive(timer) { _ in
                     fetchData()
                 }
+                .onReceive(bundleMonitor) { _ in
+                    checkBundleExists()
+                }
         } label: {
             if let data = pollutionData {
                 // Determine icon based on AQI
@@ -116,6 +121,19 @@ struct PollutionApp: App {
         }
     }
     
+    private func checkBundleExists() {
+        let bundlePath = Bundle.main.bundlePath
+        if !FileManager.default.fileExists(atPath: bundlePath) {
+            let alert = NSAlert()
+            alert.messageText = "PollutionTracker has been moved or deleted"
+            alert.informativeText = "The app can no longer run because it has been moved to the Bin or deleted. The app will now quit."
+            alert.addButton(withTitle: "Quit")
+            alert.alertStyle = .critical
+            alert.runModal()
+            NSApplication.shared.terminate(nil)
+        }
+    }
+
     private func getIconName(for aqi: Int) -> String {
         // SF Symbols for different levels
         // These are approximations
@@ -204,6 +222,15 @@ struct PollutionView: View {
                             .font(.system(size: 10, weight: .regular))
                             .opacity(0.6)
                          Spacer()
+                         Button(action: {
+                             NSApplication.shared.terminate(nil)
+                         }) {
+                             Image(systemName: "power")
+                                 .font(.system(size: 10))
+                                 .opacity(0.6)
+                         }
+                         .buttonStyle(.plain)
+                         .help("Quit PollutionTracker")
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 20) // Ensure footer isn't too close to edge
