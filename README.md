@@ -12,11 +12,13 @@ A native macOS Menu Bar application that tracks real-time air pollution levels (
 ## Installation
 
 1.  **Download**: Go to the [Releases page](https://github.com/macjul003/PollutionTracker/releases) and download the latest `PollutionTracker.zip`.
-2.  **Unzip**: Extract the zip file to verify the `PollutionTracker.app`.
-3.  **Move to Applications**: Drag and drop `PollutionTracker.app` into your `/Applications` folder.
-4.  **Open**: 
-    *   Right-click (or Control-click) on the app and select **Open**.
-    *   Click **Open** in the dialog box (this is required because the app is not notarized).
+2.  **Unzip**: Extract the zip file.
+3.  **Remove quarantine**: Open Terminal, navigate to where you unzipped the app, and run:
+    ```
+    xattr -cr PollutionTracker.app
+    ```
+    This is required because the app is not signed with an Apple Developer certificate. macOS quarantines apps downloaded from the internet and will show a "damaged" error without this step.
+4.  **Open**: Double-click `PollutionTracker.app` to launch. The app will prompt you to move it to your Applications folder.
 
 ## Usage
 - The app runs in the menu bar.
