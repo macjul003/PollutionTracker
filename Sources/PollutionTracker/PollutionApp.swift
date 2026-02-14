@@ -9,11 +9,53 @@ struct PollutionApp: App {
     @State private var isLoading = false
     @State private var errorMessage: String?
     @State private var lastUpdated: Date?
-    
+
     private let service = PollutionService()
-    
+
     private let timer = Timer.publish(every: 1800, on: .main, in: .common).autoconnect()
-    
+
+    init() {
+        moveToApplicationsIfNeeded()
+    }
+
+    private func moveToApplicationsIfNeeded() {
+        let bundlePath = Bundle.main.bundlePath
+        let applicationsPath = "/Applications/PollutionTracker.app"
+
+        // Skip if already in /Applications
+        guard !bundlePath.hasPrefix("/Applications") else { return }
+
+        let alert = NSAlert()
+        alert.messageText = "Move to Applications?"
+        alert.informativeText = "PollutionTracker works best when installed in your Applications folder. Would you like to move it there now?"
+        alert.addButton(withTitle: "Move to Applications")
+        alert.addButton(withTitle: "Not Now")
+        alert.alertStyle = .informational
+
+        if alert.runModal() == .alertFirstButtonReturn {
+            do {
+                // Remove existing copy if present
+                if FileManager.default.fileExists(atPath: applicationsPath) {
+                    try FileManager.default.removeItem(atPath: applicationsPath)
+                }
+                try FileManager.default.copyItem(atPath: bundlePath, toPath: applicationsPath)
+
+                // Launch the copy from /Applications and quit this instance
+                let task = Process()
+                task.executableURL = URL(fileURLWithPath: "/usr/bin/open")
+                task.arguments = [applicationsPath]
+                try task.run()
+
+                NSApplication.shared.terminate(nil)
+            } catch {
+                let errorAlert = NSAlert()
+                errorAlert.messageText = "Could not move app"
+                errorAlert.informativeText = error.localizedDescription
+                errorAlert.runModal()
+            }
+        }
+    }
+
     var body: some Scene {
         MenuBarExtra {
             PollutionView(pollutionData: pollutionData, isLoading: isLoading, errorMessage: errorMessage, cityName: locationManager.cityName, location: locationManager.location, lastUpdated: lastUpdated, statusMessage: locationManager.statusMessage, onRefresh: {

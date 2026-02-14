@@ -55,4 +55,13 @@ cp "$WIDGET_PLIST" "$WIDGET_BUNDLE/Contents/Info.plist"
 # chmod +x "$MACOS_DIR/$APP_NAME"
 
 echo "$APP_NAME.app created successfully!"
-echo "You can now run it by double-clicking $APP_NAME.app or running 'open $APP_NAME.app'"
+
+# Copy to /Applications
+echo "Installing to /Applications..."
+if [ -d "/Applications/$APP_BUNDLE" ]; then
+    rm -rf "/Applications/$APP_BUNDLE"
+fi
+cp -R "$APP_BUNDLE" /Applications/
+
+echo "$APP_NAME installed to /Applications successfully!"
+echo "You can now launch it from your Applications folder or Spotlight."
