@@ -11,6 +11,15 @@ A native macOS Menu Bar application that tracks real-time air pollution levels (
 
 ## Installation
 
+### Homebrew (Recommended)
+
+```bash
+brew tap macjul003/pollutiontracker
+brew install --cask pollution-tracker
+```
+
+### Manual
+
 1.  **Download**: Go to the [Releases page](https://github.com/macjul003/PollutionTracker/releases) and download the latest `PollutionTracker.zip`.
 2.  **Unzip**: Extract the zip file.
 3.  **Remove quarantine**: Open Terminal, navigate to where you unzipped the app, and run:
