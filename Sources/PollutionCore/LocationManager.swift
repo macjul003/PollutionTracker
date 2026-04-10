@@ -17,6 +17,10 @@ public class LocationManager: NSObject, ObservableObject, CLLocationManagerDeleg
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.distanceFilter = 100
+        // Pre-populate with cached values so UI shows something immediately
+        if let cached = Self.sharedDefaults?.string(forKey: "lastCityName") {
+            cityName = cached
+        }
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
         statusMessage = "Started updates..."

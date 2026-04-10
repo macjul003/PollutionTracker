@@ -3,7 +3,7 @@ import SwiftUI
 
 public struct PollutionResponse: Decodable {
     public let current: CurrentData
-    
+
     public struct CurrentData: Decodable {
         public let us_aqi: Int?
         public let pm10: Double?
@@ -15,14 +15,13 @@ public struct PollutionData {
     public let aqi: Int
     public let pm10: Double
     public let pm2_5: Double
-    
+
     public init(aqi: Int, pm10: Double, pm2_5: Double) {
         self.aqi = aqi
         self.pm10 = pm10
         self.pm2_5 = pm2_5
     }
-    
-    // Helper to get color based on US AQI
+
     public var color: String {
         switch aqi {
         case 0...50: return "Green"
@@ -33,7 +32,7 @@ public struct PollutionData {
         default: return "Maroon"
         }
     }
-    
+
     public var description: String {
         switch aqi {
         case 0...50: return "Good"

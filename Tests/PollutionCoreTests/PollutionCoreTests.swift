@@ -15,9 +15,9 @@ final class PollutionCoreTests: XCTestCase {
             }
         }
         """.data(using: .utf8)!
-        
+
         let response = try JSONDecoder().decode(PollutionResponse.self, from: json)
-        
+
         XCTAssertEqual(response.current.us_aqi, 55)
         XCTAssertEqual(response.current.pm10, 12.5)
         XCTAssertEqual(response.current.pm2_5, 8.0)
