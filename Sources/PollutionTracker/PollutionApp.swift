@@ -319,19 +319,6 @@ struct PollutionView: View {
                             .font(.system(size: 11, weight: .regular))
                             .opacity(0.6)
                     }
-                    Spacer()
-                    if isLoading {
-                        ProgressView()
-                            .scaleEffect(0.5)
-                            .frame(width: 14, height: 14)
-                    } else {
-                        Button(action: onRefresh) {
-                            Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 11, weight: .medium))
-                                .opacity(0.5)
-                        }
-                        .buttonStyle(.plain)
-                    }
                 }
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
@@ -360,6 +347,18 @@ struct PollutionView: View {
                         Text(lastUpdated != nil ? "Updated \(Self.timeFormatter.string(from: lastUpdated!))" : "Updating…")
                             .font(.system(size: 10, weight: .regular))
                             .opacity(0.5)
+                        if isLoading {
+                            ProgressView()
+                                .scaleEffect(0.5)
+                                .frame(width: 14, height: 14)
+                        } else {
+                            Button(action: onRefresh) {
+                                Image(systemName: "arrow.clockwise")
+                                    .font(.system(size: 11, weight: .medium))
+                                    .opacity(0.5)
+                            }
+                            .buttonStyle(.plain)
+                        }
                         Spacer()
                         Button(action: { NSApplication.shared.terminate(nil) }) {
                             Image(systemName: "power")

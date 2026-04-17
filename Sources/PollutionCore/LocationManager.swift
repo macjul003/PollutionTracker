@@ -38,7 +38,13 @@ public class LocationManager: NSObject, ObservableObject, CLLocationManagerDeleg
             guard let self = self, let placemark = placemarks?.first, error == nil else {
                 return
             }
-            let name = placemark.locality ?? placemark.administrativeArea ?? placemark.country
+            let locality = placemark.locality ?? placemark.administrativeArea ?? placemark.country
+            let name: String?
+            if let subLocality = placemark.subLocality, let city = locality {
+                name = "\(subLocality), \(city)"
+            } else {
+                name = locality
+            }
             self.cityName = name
             Self.sharedDefaults?.set(name, forKey: "lastCityName")
         }
