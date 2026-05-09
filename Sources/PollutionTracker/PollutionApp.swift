@@ -183,11 +183,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(locationItem)
 
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "Quit PollutionTracker", action: #selector(NSApp.terminate(_:)), keyEquivalent: "q"))
+        let quitItem = NSMenuItem(title: "Quit PollutionTracker", action: #selector(quitApp), keyEquivalent: "q")
+        quitItem.target = self
+        menu.addItem(quitItem)
 
         statusItem.menu = menu
         statusItem.button?.performClick(nil)
         statusItem.menu = nil
+    }
+
+    @objc private func quitApp() {
+        NSApplication.shared.terminate(nil)
     }
 
     @objc private func openLocationSettings() {
@@ -347,6 +353,7 @@ struct PollutionView: View {
                         Text(lastUpdated != nil ? "Updated \(Self.timeFormatter.string(from: lastUpdated!))" : "Updating…")
                             .font(.system(size: 10, weight: .regular))
                             .opacity(0.5)
+                        Spacer()
                         if isLoading {
                             ProgressView()
                                 .scaleEffect(0.5)
@@ -358,15 +365,8 @@ struct PollutionView: View {
                                     .opacity(0.5)
                             }
                             .buttonStyle(.plain)
+                            .help("Refresh")
                         }
-                        Spacer()
-                        Button(action: { NSApplication.shared.terminate(nil) }) {
-                            Image(systemName: "power")
-                                .font(.system(size: 10, weight: .medium))
-                                .opacity(0.5)
-                        }
-                        .buttonStyle(.plain)
-                        .help("Quit PollutionTracker")
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 4)
